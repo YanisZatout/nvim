@@ -40,7 +40,7 @@ keymap("n", "<A-j>", "<Esc>:m .+1<CR>==gi", opts)
 keymap("n", "<A-k>", "<Esc>:m .-2<CR>==gi", opts)
 
 -- Insert --
--- Press jk fast to exit insert mode 
+-- Press jk fast to exit insert mode
 keymap("i", "jk", "<ESC>", opts)
 
 -- Visual --
@@ -62,8 +62,36 @@ keymap("x", "<A-k>", ":move '<-2<CR>gv-gv", opts)
 
 -- Terminal --
 -- Better terminal navigation
--- keymap("t", "<C-h>", "<C-\\><C-N><C-w>h", term_opts)
--- keymap("t", "<C-j>", "<C-\\><C-N><C-w>j", term_opts)
--- keymap("t", "<C-k>", "<C-\\><C-N><C-w>k", term_opts)
--- keymap("t", "<C-l>", "<C-\\><C-N><C-w>l", term_opts)
+keymap("t", "<C-h>", "<C-\\><C-N><C-w>h", term_opts)
+keymap("t", "<C-j>", "<C-\\><C-N><C-w>j", term_opts)
+keymap("t", "<C-k>", "<C-\\><C-N><C-w>k", term_opts)
+keymap("t", "<C-l>", "<C-\\><C-N><C-w>l", term_opts)
 
+-- Telescope --
+keymap("n", "<leader>ff", "<cmd>Telescope find_files<cr>", opts) -- Find files
+keymap("n", "<leader>fg", "<cmd>Telescope grep_string<cr>", opts) -- Find files
+
+keymap("n", "<leader>fb", " <cmd>Telescope buffers<cr>", opts)
+keymap("n", "<leader>fh", "<cmd>Telescope help_tags<cr>", opts)
+
+keymap("n", "<leader>fr", "<cmd>Telescope git_files<cr>", opts) -- In current git directory
+keymap("n", "<leader>fc", "<cmd>Telescope git_commits<cr>", opts) -- In commits
+-- Treesitter --
+keymap("n", "<leader>tp", "<cmd>TSPlaygroundToggle<cr>", opts) -- Toggle playground
+
+-- Formatting
+keymap("n", "<leader>lf", "<cmd>Format<cr>", opts) -- Format on "space" f
+
+-- Highlighting
+
+keymap("v", "<F1>", ":<c-u>HSHighlight 1<CR>", opts) -- Highlight creation
+keymap("v", "<F2>", ":<c-u>HSRmHighlight<CR>", opts) -- Highlight deletion
+
+-- NvimTree --
+keymap("n", "<leader>e", "<cmd>NvimTreeToggle<cr>", opts)
+-- Buffer --
+keymap("n", "<leader>c", "<cmd>Bdelete!<CR>", opts)
+
+-- Tagbar --
+
+keymap("n", "<leader>z", "<cmd>TagbarToggle<CR>", opts)
