@@ -70,12 +70,12 @@ keymap("t", "<C-l>", "<C-\\><C-N><C-w>l", term_opts)
 -- Telescope --
 keymap("n", "<leader>ff", "<cmd>Telescope find_files<cr>", opts) -- Find files
 keymap("n", "<leader>fg", "<cmd>Telescope grep_string<cr>", opts) -- Find files
-
 keymap("n", "<leader>fb", " <cmd>Telescope buffers<cr>", opts)
 keymap("n", "<leader>fh", "<cmd>Telescope help_tags<cr>", opts)
-
 keymap("n", "<leader>fr", "<cmd>Telescope git_files<cr>", opts) -- In current git directory
 keymap("n", "<leader>fc", "<cmd>Telescope git_commits<cr>", opts) -- In commits
+keymap("n", "<leader>fp", "<cmd>lua require('telescope').extensions.projects.projects()<cr>", opts) -- In commits
+
 -- Treesitter --
 keymap("n", "<leader>tp", "<cmd>TSPlaygroundToggle<cr>", opts) -- Toggle playground
 
@@ -93,5 +93,7 @@ keymap("n", "<leader>e", "<cmd>NvimTreeToggle<cr>", opts)
 keymap("n", "<leader>c", "<cmd>Bdelete!<CR>", opts)
 
 -- Tagbar --
-
 keymap("n", "<leader>z", "<cmd>TagbarToggle<CR>", opts)
+
+-- Incremental Remap -- 
+keymap("n", "<leader>rn", ":IncRename ", opts)

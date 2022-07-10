@@ -97,16 +97,32 @@ return packer.startup(function(use)
 
 	use("ggandor/lightspeed.nvim")
 	use("petertriho/nvim-scrollbar")
-	use("karb94/neoscroll.nvim")
+	use("karb94/neoscroll.nvim") -- Smoothe scroll
 	use("Pocco81/HighStr.nvim")
 	use("nacro90/numb.nvim")
-	use({
+	use({ -- Tagbar
 		"preservim/tagbar",
 		config = function()
 			vim.cmd("let g:tagbar_position = 'botright vertical'")
 		end,
 	})
-	-- Automatically set up your configuration after cloning packer.nvim
+	-- use({ -- Debugger
+	-- 	"puremourning/vimspector",
+	-- 	cmd = { "VimspectorInstall", "VimspectorUpdate" },
+	-- 	fn = { "vimspector#Launch()", "vimspector#ToggleBreakpoint", "vimspector#Continue" },
+	-- 	config = function()
+	-- 		require("config.vimspector").setup()
+	-- 	end,
+	-- }) -- Automatically set up your configuration after cloning packer.nvim
+
+	use("mfussenegger/nvim-dap")
+
+	use({ -- Incremental rename
+		"smjonas/inc-rename.nvim",
+		config = function()
+			require("inc_rename").setup()
+		end,
+	})
 	-- Put this at the end after all plugins
 	if PACKER_BOOTSTRAP then
 		require("packer").sync()
