@@ -76,6 +76,11 @@ keymap("n", "<leader>fr", "<cmd>Telescope git_files<cr>", opts) -- In current gi
 keymap("n", "<leader>fc", "<cmd>Telescope git_commits<cr>", opts) -- In commits
 keymap("n", "<leader>fp", "<cmd>lua require('telescope').extensions.projects.projects()<cr>", opts) -- In commits
 
+-- Telescope dap for debugger -- 
+keymap('n', '<leader>ds', ':Telescope dap frames<CR>', opts)
+-- vim.keymap.set('n', '<leader>dc', ':Telescope dap commands<CR>', opts)
+keymap('n', '<leader>db', ':Telescope dap list_breakpoints<CR>', opts)
+
 -- Treesitter --
 keymap("n", "<leader>tp", "<cmd>TSPlaygroundToggle<cr>", opts) -- Toggle playground
 
@@ -97,3 +102,22 @@ keymap("n", "<leader>z", "<cmd>TagbarToggle<CR>", opts)
 
 -- Incremental Remap -- 
 keymap("n", "<leader>rn", ":IncRename ", opts)
+
+-- dap: debugger --
+keymap('n', '<leader>dh', ':lua require"dap".toggle_breakpoint()<CR>', opts)
+keymap('n', '<leader>dH', ":lua require'dap'.set_breakpoint(vim.fn.input('Breakpoint condition: '))<CR>", opts)
+keymap('n', '<A-k>', ':lua require"dap".step_out()<CR>', opts)
+keymap('n', '<A-l>', ':lua require"dap".step_into()<CR>', opts)
+keymap('n', '<A-j>', ':lua require"dap".step_over()<CR>', opts)
+keymap('n', '<A-h>', ':lua require"dap".continue()<CR>', opts)
+keymap('n', '<leader>dn', ':lua require"dap".run_to_cursor()<CR>', opts)
+keymap('n', '<leader>dc', ':lua require"dap".terminate()<CR>', opts)
+keymap('n', '<leader>dR', ':lua require"dap".clear_breakpoints()<CR>', opts)
+keymap('n', '<leader>de', ':lua require"dap".set_exception_breakpoints({"all"})<CR>', opts)
+keymap('n', '<leader>da', ':lua require"debugHelper".attach()<CR>', opts)
+keymap('n', '<leader>dA', ':lua require"debugHelper".attachToRemote()<CR>', opts)
+keymap('n', '<leader>di', ':lua require"dap.ui.widgets".hover()<CR>', opts)
+keymap('n', '<leader>d,', ':lua local widgets=require"dap.ui.widgets";widgets.centered_float(widgets.scopes)<CR>', opts)
+keymap('n', '<leader>dk', ':lua require"dap".up()<CR>zz', opts)
+keymap('n', '<leader>dj', ':lua require"dap".down()<CR>zz', opts)
+keymap('n', '<leader>dr', ':lua require"dap".repl.toggle({}, "vsplit")<CR><C-w>l', opts)

@@ -106,23 +106,20 @@ return packer.startup(function(use)
 			vim.cmd("let g:tagbar_position = 'botright vertical'")
 		end,
 	})
-	-- use({ -- Debugger
-	-- 	"puremourning/vimspector",
-	-- 	cmd = { "VimspectorInstall", "VimspectorUpdate" },
-	-- 	fn = { "vimspector#Launch()", "vimspector#ToggleBreakpoint", "vimspector#Continue" },
-	-- 	config = function()
-	-- 		require("config.vimspector").setup()
-	-- 	end,
-	-- }) -- Automatically set up your configuration after cloning packer.nvim
-
 	use("mfussenegger/nvim-dap")
-
+	use("rcarriga/nvim-dap-ui")
+	use("theHamsta/nvim-dap-virtual-text")
+	use("mfussenegger/nvim-dap-python")
+	use("nvim-telescope/telescope-dap.nvim")
+	use("Pocco81/DAPInstall.nvim")
+	use("jbyuki/one-small-step-for-vimkind")
 	use({ -- Incremental rename
 		"smjonas/inc-rename.nvim",
 		config = function()
 			require("inc_rename").setup()
 		end,
 	})
+
 	-- Put this at the end after all plugins
 	if PACKER_BOOTSTRAP then
 		require("packer").sync()
