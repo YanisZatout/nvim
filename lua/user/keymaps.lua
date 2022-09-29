@@ -31,6 +31,10 @@ keymap("n", "<C-Down>", ":resize +2<CR>", opts)
 keymap("n", "<C-Left>", ":vertical resize -2<CR>", opts)
 keymap("n", "<C-Right>", ":vertical resize +2<CR>", opts)
 
+-- Resizing splits
+-- keymap("n","<Leader>+", ':exe "resize " . (winheight(0) * 3/2)<CR>', opts)
+-- keymap("n","<Leader>-", ':exe "resize " . (winheight(0) * 2/3)<CR>', opts)
+keymap("n", "<Leader>x", ":let @/=''<CR>", opts)
 -- Navigate buffers
 keymap("n", "<S-l>", ":bnext<CR>", opts)
 keymap("n", "<S-h>", ":bprevious<CR>", opts)
@@ -76,16 +80,13 @@ keymap("n", "<leader>fr", "<cmd>Telescope git_files<cr>", opts) -- In current gi
 keymap("n", "<leader>fc", "<cmd>Telescope git_commits<cr>", opts) -- In commits
 keymap("n", "<leader>fp", "<cmd>lua require('telescope').extensions.projects.projects()<cr>", opts) -- In commits
 
--- Telescope dap for debugger -- 
-keymap('n', '<leader>ds', ':Telescope dap frames<CR>', opts)
+-- Telescope dap for debugger --
+keymap("n", "<leader>ds", ":Telescope dap frames<CR>", opts)
 -- vim.keymap.set('n', '<leader>dc', ':Telescope dap commands<CR>', opts)
-keymap('n', '<leader>db', ':Telescope dap list_breakpoints<CR>', opts)
+keymap("n", "<leader>db", ":Telescope dap list_breakpoints<CR>", opts)
 
 -- Treesitter --
 keymap("n", "<leader>tp", "<cmd>TSPlaygroundToggle<cr>", opts) -- Toggle playground
-
--- Formatting
-keymap("n", "<leader>lf", "<cmd>Format<cr>", opts) -- Format on "space" f
 
 -- Highlighting
 
@@ -97,27 +98,28 @@ keymap("n", "<leader>e", "<cmd>NvimTreeToggle<cr>", opts)
 -- Buffer --
 keymap("n", "<leader>c", "<cmd>Bdelete!<CR>", opts)
 
--- Tagbar --
-keymap("n", "<leader>z", "<cmd>TagbarToggle<CR>", opts)
+--[[ -- Tagbar -- ]]
+--[[ keymap("n", "<leader>z", "<cmd>TagbarToggle<CR>", opts) ]]
 
--- Incremental Remap -- 
+-- Incremental Remap --
 keymap("n", "<leader>rn", ":IncRename ", opts)
 
--- dap: debugger --
-keymap('n', '<leader>dh', ':lua require"dap".toggle_breakpoint()<CR>', opts)
-keymap('n', '<leader>dH', ":lua require'dap'.set_breakpoint(vim.fn.input('Breakpoint condition: '))<CR>", opts)
-keymap('n', '<A-k>', ':lua require"dap".step_out()<CR>', opts)
-keymap('n', '<A-l>', ':lua require"dap".step_into()<CR>', opts)
-keymap('n', '<A-j>', ':lua require"dap".step_over()<CR>', opts)
-keymap('n', '<A-h>', ':lua require"dap".continue()<CR>', opts)
-keymap('n', '<leader>dn', ':lua require"dap".run_to_cursor()<CR>', opts)
-keymap('n', '<leader>dc', ':lua require"dap".terminate()<CR>', opts)
-keymap('n', '<leader>dR', ':lua require"dap".clear_breakpoints()<CR>', opts)
-keymap('n', '<leader>de', ':lua require"dap".set_exception_breakpoints({"all"})<CR>', opts)
-keymap('n', '<leader>da', ':lua require"debugHelper".attach()<CR>', opts)
-keymap('n', '<leader>dA', ':lua require"debugHelper".attachToRemote()<CR>', opts)
-keymap('n', '<leader>di', ':lua require"dap.ui.widgets".hover()<CR>', opts)
-keymap('n', '<leader>d,', ':lua local widgets=require"dap.ui.widgets";widgets.centered_float(widgets.scopes)<CR>', opts)
-keymap('n', '<leader>dk', ':lua require"dap".up()<CR>zz', opts)
-keymap('n', '<leader>dj', ':lua require"dap".down()<CR>zz', opts)
-keymap('n', '<leader>dr', ':lua require"dap".repl.toggle({}, "vsplit")<CR><C-w>l', opts)
+-- azerty remaps --
+keymap("v", ";", ".", { noremap = true })
+keymap("n", "m", "$", opts)
+keymap("v", ".", ":normal.<CR>", { noremap = true })
+
+keymap("n", "c*", "*Ncgn", opts)
+keymap("n", "c#", "#NcgN", opts)
+keymap("n", "cg*", "g*Ncgn", opts)
+keymap("n", "cg#", "g#Ncgn", opts)
+keymap("n", "Y", "y$", opts)
+keymap("n", "µ", "#", { noremap = false, silent = true })
+keymap("n", "²", ".", { noremap = false, silent = true })
+      -- Incrementing and decrementing --
+keymap("n", "+", "<C-a>", opts)
+keymap("n", "-", "<C-x>", opts)
+keymap("x", "+", "<C-a>", opts)
+keymap("x", "-", "<C-x>", opts)
+
+keymap("", "'", "<C-]>", opts)

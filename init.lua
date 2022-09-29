@@ -16,11 +16,25 @@ require("user.toggleterm")
 require("user.project")
 require("user.impatient")
 require("user.indentline")
--- require("user.alpha")
+require("user.alpha")
 require("user.whichkey")
 require("user.autocommands")
 require("user.personal.numb")
--- require("user.personal.neoscroll")
 require("user.personal.lightspeed")
 require("user.personal.nvim-scrollbar")
 require("user.personal.dap")
+require("user.neogit")
+--      --[[ require("user.vimtex") ]]
+require("user.personal.refactoring")
+
+require("user.personal.symbols_outline")
+require("user.personal.illuminate")
+require("user.personal.navic")
+require("user.personal.tabout")
+require("user.personal.todo-comments")
+require("user.personal.ts-context")
+require("user.personal.vim-slash")
+
+
+require "user.keyboard"
+vim.cmd([[let &colorcolumn = join(range(81,999), ',')]])

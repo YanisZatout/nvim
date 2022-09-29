@@ -46,14 +46,14 @@ M.setup = function()
   })
 end
 
-local function lsp_highlight_document(client)
-  -- Set autocommands conditional on server_capabilities
-  local status_ok, illuminate = pcall(require, "illuminate")
+local function attach_navic(client, bufnr)
+  vim.g.navic_silence = true
+  local status_ok, navic = pcall(require, "nvim-navic")
   if not status_ok then
+    print("Protected call to nvim-navic in handlers.lua: attach_navic failed")
     return
   end
-  illuminate.on_attach(client)
-  -- end
+  navic.attach(client, bufnr)
 end
 
 local function lsp_keymaps(bufnr)
@@ -78,22 +78,23 @@ local function lsp_keymaps(bufnr)
   vim.api.nvim_buf_set_keymap(bufnr, "n", "]d", '<cmd>lua vim.diagnostic.goto_next({ border = "rounded" })<CR>', opts)
   vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>q", "<cmd>lua vim.diagnostic.setloclist()<CR>", opts)
   vim.cmd([[ command! Format execute 'lua vim.lsp.buf.format{async=true}' ]])
+  vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>=", "<cmd>Format<cr>", opts) -- Format on "space" =
 end
 
 M.on_attach = function(client, bufnr)
+  lsp_keymaps(bufnr)
+  attach_navic(client, bufnr)
   -- vim.notify(client.name .. " starting...")
-  -- TODO: refactor this into a method that checks if string in list
   if client.name == "tsserver" then
     client.server_capabilities.documentFormattingProvider = false
   end
-  lsp_keymaps(bufnr)
-  lsp_highlight_document(client)
 end
 
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 
 local status_ok, cmp_nvim_lsp = pcall(require, "cmp_nvim_lsp")
 if not status_ok then
+  print("Protected call to cmp_nvim_lsp in handlers.lua failed")
   return
 end
 

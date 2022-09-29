@@ -56,14 +56,18 @@ return packer.startup(function(use)
 	use("ahmedkhalf/project.nvim")
 	use("lewis6991/impatient.nvim")
 	use("lukas-reineke/indent-blankline.nvim")
-	use("goolord/alpha-nvim")
 	use("folke/which-key.nvim")
 	use("hrsh7th/cmp-cmdline")
 	use("nvim-lua/popup.nvim")
 	-- Colorschemes
-	use({ "folke/tokyonight.nvim" })
-	use("lunarvim/darkplus.nvim")
+	--	use({ "folke/tokyonight.nvim" })
+	use({ "lunarvim/darkplus.nvim" })
+	--	use("LunarVim/horizon.nvim")
+	--	use({ "LunarVim/onedarker.nvim" })
 
+	-- Startup stuff
+	use("goolord/alpha-nvim")
+	use({ "glepnir/dashboard-nvim" })
 	-- cmp plugins
 	use({ "hrsh7th/nvim-cmp" }) -- The completion plugin
 	use({ "hrsh7th/cmp-buffer" }) -- buffer completions
@@ -71,6 +75,8 @@ return packer.startup(function(use)
 	use({ "saadparwaiz1/cmp_luasnip" }) -- snippet completions
 	use({ "hrsh7th/cmp-nvim-lsp" })
 	use({ "hrsh7th/cmp-nvim-lua" })
+	-- COPILOT EQUIVALENT --
+	--[[ use 'vappolinario/cmp-clippy' ]]
 
 	-- snippets
 	use({ "L3MON4D3/LuaSnip" }) --snippet engine
@@ -87,8 +93,17 @@ return packer.startup(function(use)
 	-- Treesitter
 	use({
 		"nvim-treesitter/nvim-treesitter",
+		--[[ commit = "518e27589c0463af15463c9d675c65e464efc2fe", ]]
 	})
 
+	use({
+		"TimUntersberger/neogit",
+		requires = {
+			"nvim-lua/plenary.nvim",
+			"sindrets/diffview.nvim",
+		},
+		commit = "92fa410c2edcb407fa92b454dc9e9b7d7a185fd6",
+	})
 	-- Git
 	use({ "lewis6991/gitsigns.nvim" })
 
@@ -100,14 +115,10 @@ return packer.startup(function(use)
 	use("karb94/neoscroll.nvim") -- Smoothe scroll
 	use("Pocco81/HighStr.nvim")
 	use("nacro90/numb.nvim")
-	use({ -- Tagbar
-		"preservim/tagbar",
-		config = function()
-			vim.cmd("let g:tagbar_position = 'botright vertical'")
-		end,
-	})
+
+	use("simrat39/symbols-outline.nvim")
 	use("mfussenegger/nvim-dap")
-	use("rcarriga/nvim-dap-ui")
+	use({ "rcarriga/nvim-dap-ui", requires = { "mfussenegger/nvim-dap" } })
 	use("theHamsta/nvim-dap-virtual-text")
 	use("mfussenegger/nvim-dap-python")
 	use("nvim-telescope/telescope-dap.nvim")
@@ -120,7 +131,30 @@ return packer.startup(function(use)
 		end,
 	})
 
+	use("nvim-treesitter/nvim-treesitter-textobjects")
+	use({ "EdenEast/nightfox.nvim" })
+	use({
+		"ThePrimeagen/refactoring.nvim",
+		requires = {
+			{ "nvim-lua/plenary.nvim" },
+			{ "nvim-treesitter/nvim-treesitter" },
+			{ "nvim-telescope/telescope.nvim" },
+		},
+	})
+	use({ "lervag/vimtex" })
+	use("RRethy/vim-illuminate")
+	use("SmiteshP/nvim-navic")
+	use("tiagovla/scope.nvim")
+	-- NAVIGATION UTILITIES --
+	use({
+		"abecodes/tabout.nvim",
+	})
+	-- TODO SEARCHER --
+	use("folke/todo-comments.nvim")
 	-- Put this at the end after all plugins
+	use("nvim-treesitter/nvim-treesitter-context")
+	-- Improved search
+	use("junegunn/vim-slash")
 	if PACKER_BOOTSTRAP then
 		require("packer").sync()
 	end

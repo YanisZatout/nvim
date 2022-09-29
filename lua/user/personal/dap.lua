@@ -1,67 +1,124 @@
 local M = {}
 
-local function configure()
-	local dap_install = require("dap-install")
-	dap_install.setup({
-		installation_path = vim.fn.stdpath("data") .. "/dapinstall/",
-	})
+function M.get_python_path(workspace)
+  -- Use activated virtualenv.
+  local util = require("lspconfig/util")
 
-	local dap_breakpoint = {
-		error = {
-			text = "🟥",
-			texthl = "LspDiagnosticsSignError",
-			linehl = "",
-			numhl = "",
+  local path = util.path
+  if vim.env.VIRTUAL_ENV then
+    return path.join(vim.env.VIRTUAL_ENV, "bin", "python")
+  end
+
+  -- Find and use virtualenv in workspace directory.
+  for _, pattern in ipairs({ "*", ".*" }) do
+    local match = vim.fn.glob(path.join(workspace or vim.fn.getcwd(), pattern, "pyvenv.cfg"))
+    if match ~= "" then
+      return path.join(path.dirname(match), "bin", "python")
+    end
+  end
+
+  -- Fallback to system Python.
+  return vim.fn.exepath("python3") or vim.fn.exepath("python") or "python"
+end
+local dap = require("dap")
+local dapui = require("dapui")
+dapui.setup({
+	layouts = {
+		{
+			elements = {
+				"scopes",
+				"breakpoints",
+				"stacks",
+				"watches",
+			},
+			size = 0.25,
+			position = "left",
 		},
-		rejected = {
-			text = "",
-			texthl = "LspDiagnosticsSignHint",
-			linehl = "",
-			numhl = "",
+		{
+			elements = { "repl", "console" },
+			size = 0.25,
+			position = "bottom",
 		},
-		stopped = {
-			text = "⭐️",
-			texthl = "LspDiagnosticsSignInformation",
-			linehl = "DiagnosticUnderlineInfo",
-			numhl = "LspDiagnosticsSignInformation",
-		},
-	}
+	},
+	floating = { max_width = 0.9, max_height = 0.5, border = vim.g.border_chars },
+})
 
-	vim.fn.sign_define("DapBreakpoint", dap_breakpoint.error)
-	vim.fn.sign_define("DapStopped", dap_breakpoint.stopped)
-	vim.fn.sign_define("DapBreakpointRejected", dap_breakpoint.rejected)
+local mappings = {
+	["<leader>dc"] = dap.continue,
+	["<leader>do"] = dap.step_over,
+	["<leader>di"] = dap.step_into,
+	["<leader>dO"] = dap.step_out,
+	["<leader>db"] = dap.toggle_breakpoint,
+  ["<leader>dB"] = dap.step_back,
+	["<M-t>"] = function()
+		dapui.toggle({ reset = true })
+	end,
+	["<M-e>"] = dapui.eval,
+	["<M-m>"] = dapui.float_element,
+	["<M-v>"] = function()
+		dapui.float_element("scopes")
+	end,
+	["<M-r>"] = function()
+		dapui.float_element("repl")
+	end,
+	["<leader>dt"] = dap.terminate,
+  ["<leader>dq"] = dap.clear_breakpoints,
+}
+for keys, mapping in pairs(mappings) do
+	vim.api.nvim_set_keymap("n", keys, "", { callback = mapping, noremap = true })
 end
 
-local function configure_exts()
-	require("nvim-dap-virtual-text").setup({
-		commented = true,
-	})
+vim.api.nvim_set_keymap("v", "<M-e>", "", { callback = dapui.eval })
+vim.fn.sign_define("DapBreakpoint", { text = "→", texthl = "Error", linehl = "", numhl = "" })
+vim.fn.sign_define("DapStopped", { text = "→", texthl = "Success", linehl = "", numhl = "" })
 
-	local dap, dapui = require("dap"), require("dapui")
-	dapui.setup({}) -- use default
-	dap.listeners.after.event_initialized["dapui_config"] = function()
-		dapui.open()
-	end
-	dap.listeners.before.event_terminated["dapui_config"] = function()
-		dapui.close()
-	end
-	dap.listeners.before.event_exited["dapui_config"] = function()
-		dapui.close()
-	end
-end
+dap.set_log_level("DEBUG")
+local dap_python = require("dap-python")
+local std_debugpy_python = vim.fn.environ()["CONDA_PYTHON_EXE"]
 
-local function configure_debuggers()
-	local std_debugpy_python = vim.fn.environ()["CONDA_PYTHON_EXE"]
-	require("dap-python").setup(std_debugpy_python, { test_runners = "pytest" })
-end
+dap_python.setup(std_debugpy_python, { include_configs = false })
+dap.configurations.python = {
+	{
+		type = "python",
+		request = "launch",
+		name = "Launch file",
+		justMyCode = false,
+		program = "${file}",
+		console = "integratedTerminal",
+		pythonPath = M.get_python_path(),
+	},
+	{
+		type = "python",
+		request = "attach",
+		name = "Attach remote",
+		justMyCode = false,
+		pythonPath = M.get_python_path(),
+		host = function()
+			local value = vim.fn.input("Host [127.0.0.1]: ")
+			if value ~= "" then
+				return value
+			end
+			return "127.0.0.1"
+		end,
+		port = function()
+			return tonumber(vim.fn.input("Port [5678]: ")) or 5678
+		end,
+	},
+}
 
-function M.setup()
-	configure() -- Configuration
-	configure_exts() -- Extensions
-	configure_debuggers() -- Debugger
-	-- require("config.dap.keymaps").setup() -- Keymaps
-end
+dap_python.test_runner = "pytest"
 
-configure_debuggers()
-
-return M
+--
+-- dap.configurations.cpp = {
+--   {
+--     name = "Launch",
+--     type = "lldb",
+--     request = "launch",
+--     program = function()
+--       return vim.fn.input("Path to executable: ", vim.fn.getcwd() .. "/", "file")
+--     end,
+--     cwd = "${workspaceFolder}",
+--     stopOnEntry = false,
+--     args = {},
+--   },
+-- }
